@@ -1,0 +1,62 @@
+// Leandro Guincho — Prisma schema
+// LOCAL DEV uses SQLite (works in sandbox).
+// PRODUCTION ON VERCEL: change `provider = "postgresql"` and set `DATABASE_URL`
+// to a Neon / Supabase / Vercel Postgres connection string. Then run
+// `prisma generate && prisma db push`. Schema below uses only portable types.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Admin user (single-tenant). Created on first visit to /admin/login.
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// SEO + content settings editable via /admin/seo.
+model SiteSetting {
+  id    String @id
+  value String
+}
+
+/// Blog post (admin-managed). Slug is unique and SEO-friendly.
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String
+  coverImage  String?
+  tags        String?
+  author      String   @default("Leandro Guincho")
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  seoTitle       String?
+  seoDescription String?
+  ogImage        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published, publishedAt])
+}
+
+/// Visit tracking. One row per page view.
+model Visit {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+}
