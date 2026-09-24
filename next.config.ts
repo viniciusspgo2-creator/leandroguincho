@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -12,7 +11,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
-  // Legacy PHP URL redirects — preserve SEO equity.
   async redirects() {
     return [
       { source: "/index.php", destination: "/", permanent: true },
