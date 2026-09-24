@@ -7,6 +7,8 @@ import { defaultSeoSettings } from "@/lib/settings";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? defaultConfig.site.url;
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
