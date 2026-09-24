@@ -5,7 +5,9 @@ import { defaultConfig } from "@/lib/config";
 import { defaultSeoSettings } from "@/lib/settings";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? defaultConfig.site.url;
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  defaultConfig.site.url?.trim() ||
+  "http://localhost:3000";
 
 export const dynamic = "force-dynamic";
 
